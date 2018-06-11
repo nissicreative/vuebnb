@@ -29,4 +29,9 @@ class ListingController extends Controller
         $model = $this->add_image_urls($model, $listing->id);
         return view('app', ['model' => $model]);
     }
+
+    public function get_home_web()
+    {
+        return view('app', ['model' => []]);
+    }
 }
