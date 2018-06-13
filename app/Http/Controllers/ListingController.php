@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Listing;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ListingController extends Controller
 {
@@ -11,8 +12,8 @@ class ListingController extends Controller
     {
         $model = $listing->toArray();
         for ($i = 1; $i <= 4; $i++) {
-            $model['image_'.$i] = asset(
-                'images/'.$listing->id.'/Image_'.$i.'.jpg'
+            $model['image_' . $i] = asset(
+                'images/' . $listing->id . '/Image_' . $i . '.jpg'
             );
         }
         return collect(['listing' => $model]);
@@ -22,6 +23,8 @@ class ListingController extends Controller
     {
         return $collection->merge([
             'path' => $request->getPathInfo(),
+            'auth' => Auth::check(),
+            'saved' => Auth::check() ? Auth::user()->saved : [],
         ]);
     }
 
@@ -32,7 +35,7 @@ class ListingController extends Controller
         ]);
         $collection->transform(function ($listing) {
             $listing->thumb = asset(
-                'images/'.$listing->id.'/Image_1_thumb.jpg'
+                'images/' . $listing->id . '/Image_1_thumb.jpg'
             );
             return $listing;
         });
